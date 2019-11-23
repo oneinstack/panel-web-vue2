@@ -110,6 +110,7 @@
       <el-table-column
         :label="$t('table.cron_type')"
         align="center"
+        width="120"
       >
         <template slot-scope="scope">
           <span>{{ scope.row.cron_type | cronTypeFilter }}</span>
@@ -128,6 +129,7 @@
       <el-table-column
         :label="$t('table.content')"
         align="center"
+        width="250"
       >
         <template slot-scope="scope">
           <span>{{ scope.row.content }}</span>
@@ -148,6 +150,7 @@
         prop="status"
         sortable
         align="center"
+        width="120"
       >
         <template slot-scope="scope">
           <el-switch
@@ -248,7 +251,11 @@
           prop="cron_time"
         >
           <el-popover v-model="cronPopover">
-            <cron i18n="en" @change="changeCron" @close="cronPopover=false" />
+            <cron
+              i18n="en"
+              @change="changeCron"
+              @close="cronPopover=false"
+            />
           </el-popover>
           <el-input
             v-model="temp.cron_time"
@@ -471,16 +478,10 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        cron_name: [
-          { required: true, message: 'cron_name is required', trigger: 'blur' }
-        ],
-        cron_type: [{ required: true, message: 'cron_type is required' }],
-        cron_time: [
-          { required: true, message: 'cron_time is required', trigger: 'blur' }
-        ],
-        content: [
-          { required: true, message: 'content is required', trigger: 'blur' }
-        ]
+        cron_name: [{ required: true, trigger: 'blur' }],
+        cron_type: [{ required: true }],
+        cron_time: [{ required: true, trigger: 'blur' }],
+        content: [{ required: true, trigger: 'blur' }]
       },
       downloadLoading: false
     }
@@ -525,7 +526,7 @@ export default {
     resetTemp() {
       this.temp = {
         cron_name: '',
-        cron_type: '',
+        cron_type: 1,
         cron_time: '',
         content: '',
         comment: '',

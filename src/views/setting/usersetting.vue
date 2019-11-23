@@ -524,7 +524,7 @@ export default {
         phone: '',
         email: '',
         comment: '',
-        user_type: '',
+        user_type: 1,
         status: undefined
       }
     },
