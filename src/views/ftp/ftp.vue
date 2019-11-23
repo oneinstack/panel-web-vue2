@@ -112,15 +112,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span v-if="showPassword">
-            {{ ListpassWord(scope.row.password) }}
-            <i class="el-input__icon el-icon-view el-input__clear" @click="showPassword = false" />
-
-          </span>
-          <span v-else>
-            {{ scope.row.password }}
-            <i class="el-input__icon el-icon-view el-input__clear" @click="showPassword = true" />
-          </span>
+          <ListPassword :password="scope.row.password" />
         </template>
       </el-table-column>
 
@@ -348,6 +340,7 @@ import {
   ftpDelete,
   ftpUpdateBatch
 } from '@/api/ftp'
+import ListPassword from '@/components/ListPassword'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -369,7 +362,7 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
 
 export default {
   name: 'ComplexTable',
-  components: { Pagination },
+  components: { Pagination, ListPassword },
   directives: { waves },
   filters: {
     statusFilter(status) {
@@ -644,15 +637,6 @@ export default {
           duration: 2000
         })
       })
-    },
-    ListpassWord(val) {
-      const len = val.length
-      let createPassword = ''
-      for (let i = 0; i < len; i++) {
-        const j = '*'
-        createPassword += j
-      }
-      return createPassword
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort
