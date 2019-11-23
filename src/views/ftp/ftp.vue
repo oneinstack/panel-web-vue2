@@ -112,10 +112,14 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>
+          <span v-if="showPassword">
             {{ ListpassWord(scope.row.password) }}
-            <i class="el-input__icon el-icon-view el-input__clear" />
+            <i class="el-input__icon el-icon-view el-input__clear" @click="showPassword = false" />
 
+          </span>
+          <span v-else>
+            {{ scope.row.password }}
+            <i class="el-input__icon el-icon-view el-input__clear" @click="showPassword = true" />
           </span>
         </template>
       </el-table-column>
@@ -390,6 +394,7 @@ export default {
     return {
       tableKey: 0,
       list: null,
+      showPassword: true,
       multipleSelection: [],
       total: 0,
       listLoading: true,
