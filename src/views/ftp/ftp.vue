@@ -222,9 +222,7 @@
           <el-input
             v-model="temp.password"
             placeholder="6 - 20"
-            show-password
-            minlength="6"
-            maxlength="20"
+            :disabled="dialogStatus === 'detail' ? true : false"
           />
         </el-form-item>
 
@@ -427,21 +425,13 @@ export default {
       pvData: [],
       rules: {
         username: [
-          { required: true, message: 'username is required', trigger: 'blur' }
+          { required: true, min: 4, max: 20, trigger: 'blur' }
         ],
         email: [
-          {
-            type: 'email',
-            message: 'email is not a valid email',
-            trigger: ['blur', 'change']
-          }
+          { type: 'email', trigger: ['blur', 'change'] }
         ],
         password: [
-          {
-            min: 6,
-            max: 20,
-            message: 'password must be between 6 and 20 characters'
-          }
+          { min: 6, max: 20 }
         ]
       },
       downloadLoading: false
