@@ -98,7 +98,7 @@ export const constantRoutes = [
     children: [
       {
         path: '',
-        component: () => import('@/views/dashboard/index'),
+        component: () => import('@/views/monitor/index'),
         name: 'monitor',
         meta: { title: 'monitor', icon: 'icon-monitor', affix: true }
       }
