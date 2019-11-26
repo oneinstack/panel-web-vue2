@@ -55,6 +55,7 @@ export default {
         for (const keys in val.data) {
           opt.legend.data.push(keys)
           const tmp_data_opt = {
+            areaStyle: {},
             name: keys,
             smooth: false,
             type: 'line',
