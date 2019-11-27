@@ -125,6 +125,8 @@ export default {
     character_set: '字符集',
     database_type: '数据库类型',
     user_account: '绑定账号',
+    permissions: '权限',
+    hosts: '地址',
     loading: '加载中'
   },
   example: {

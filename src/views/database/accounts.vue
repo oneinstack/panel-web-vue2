@@ -2,8 +2,8 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-        v-model="listQuery.username"
-        :placeholder="$t('table.username')"
+        v-model="listQuery.db_name"
+        :placeholder="$t('table.user_account')"
         clearable
         prefix-icon="el-icon-search"
         style="width: 200px;"
@@ -11,22 +11,6 @@
         @keyup.enter.native="handleFilter"
         @clear="handleFilter"
       />
-
-      <el-select
-        v-model="listQuery.status"
-        :placeholder="$t('table.status')"
-        clearable
-        style="width: 90px"
-        class="filter-item"
-        @change="handleFilter"
-      >
-        <el-option
-          v-for="item in statusOptions"
-          :key="item.key"
-          :label="item.display_name"
-          :value="item.key"
-        />
-      </el-select>
 
       <!-- <el-select
         v-model="listQuery.sort"
@@ -99,11 +83,11 @@
         </template>
       </el-table-column>-->
       <el-table-column
-        :label="$t('table.username')"
+        :label="$t('table.user_account')"
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.username }}</span>
+          <span>{{ scope.row.db_user }}</span>
         </template>
       </el-table-column>
 
@@ -112,16 +96,34 @@
         align="center"
       >
         <template slot-scope="scope">
-          <ListPassword :password="scope.row.password" />
+          <ListPassword :password="scope.row.db_password" />
         </template>
       </el-table-column>
 
       <el-table-column
-        :label="$t('table.path')"
+        :label="$t('table.hosts')"
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.path }}</span>
+          <span>{{ scope.row.db_host_list.join(",") }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        :label="$t('table.database_name')"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span>{{ scope.row.db_name_list.join(",") }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        :label="$t('table.permissions')"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span>{{ scope.row.permission_list.join(",") }}</span>
         </template>
       </el-table-column>
 
@@ -139,6 +141,7 @@
         prop="status"
         sortable
         align="center"
+        width="120"
       >
         <template slot-scope="scope">
           <el-switch
@@ -206,11 +209,11 @@
         style="width: 380px; margin-left:50px;"
       >
         <el-form-item
-          :label="$t('table.username')"
-          prop="username"
+          :label="$t('table.account')"
+          prop="db_user"
         >
           <el-input
-            v-model="temp.username"
+            v-model="temp.db_user"
             :disabled="dialogStatus === 'create' ? false : true"
           />
         </el-form-item>
@@ -220,18 +223,28 @@
           prop="password"
         >
           <el-input
-            v-model="temp.password"
+            v-model="temp.db_password"
             placeholder="6 - 20"
             :disabled="dialogStatus === 'detail' ? true : false"
           />
         </el-form-item>
 
         <el-form-item
-          :label="$t('table.path')"
-          prop="path"
+          :label="$t('table.hosts')"
+          prop="db_host_list"
         >
           <el-input
-            v-model="temp.path"
+            v-model="temp.db_host_list"
+            :disabled="dialogStatus === 'detail' ? true : false"
+          />
+        </el-form-item>
+
+        <el-form-item
+          :label="$t('table.database_name')"
+          prop="db_name"
+        >
+          <el-input
+            v-model="temp.db_name"
             :disabled="dialogStatus === 'detail' ? true : false"
           />
         </el-form-item>
@@ -331,13 +344,13 @@
 
 <script>
 import {
-  ftpReload,
-  ftpList,
-  ftpCreate,
-  ftpUpdate,
-  ftpDelete,
-  ftpUpdateBatch
-} from '@/api/ftp'
+  databaseReload,
+  databaseUserList,
+  databaseUserCreate,
+  databaseUserUpdate,
+  databaseUserDelete,
+  databaseUserUpdateBatch
+} from '@/api/database'
 import ListPassword from '@/components/ListPassword'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -345,11 +358,6 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
   { key: 'US', display_name: 'USA' }
-]
-
-const statusOptions = [
-  { key: 1, display_name: i18n.t('table.enable') },
-  { key: 2, display_name: i18n.t('table.disable') }
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
@@ -402,15 +410,17 @@ export default {
         { label: 'status Ascending', key: '+status' },
         { label: 'status Descending', key: '-status' }
       ],
-      statusOptions,
       showReviewer: false,
       temp: {
         id: undefined,
-        username: '',
-        password: '',
-        phone: '',
-        email: '',
-        user_type: '',
+        db_user: '',
+        db_password: '',
+        db_host_list: '',
+        db_id_list: '',
+        permission_list: '',
+        db_name: '',
+        db_character: '',
+        db_type: '',
         status: undefined,
         comment: ''
       },
@@ -424,11 +434,8 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        username: [
+        db_user: [
           { required: true, min: 4, max: 20, trigger: 'blur' }
-        ],
-        email: [
-          { type: 'email', trigger: ['blur', 'change'] }
         ],
         password: [
           { min: 6, max: 20 }
@@ -443,7 +450,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      ftpList(this.listQuery).then(response => {
+      databaseUserList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
@@ -476,9 +483,14 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        username: '',
-        password: '',
-        path: '/data/wwwroot',
+        db_user: '',
+        db_password: '',
+        db_host_list: '',
+        db_id_list: '',
+        permission_list: '',
+        db_name: '',
+        db_character: 'utf8mb4',
+        db_type: 'MySQL',
         comment: '',
         status: undefined
       }
@@ -497,7 +509,7 @@ export default {
       this.resetTemp()
       this.dialogStatus = 'reload'
       this.dialogFormVisible = false
-      ftpReload().then(() => {
+      databaseReload().then(() => {
         this.$notify({
           title: i18n.t('table.success'),
           message: i18n.t('table.reloaded_successfully'),
@@ -519,7 +531,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          ftpCreate(this.temp).then(() => {
+          databaseUserCreate(this.temp).then(() => {
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
@@ -555,7 +567,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          ftpUpdate(tempData).then(() => {
+          databaseUserUpdate(tempData).then(() => {
             for (const v of this.list) {
               if (v.id === this.temp.id) {
                 const index = this.list.indexOf(v)
@@ -578,7 +590,7 @@ export default {
       const data = {
         id: row.id
       }
-      ftpDelete(data).then(() => {
+      databaseUserDelete(data).then(() => {
         this.$notify({
           title: i18n.t('table.success'),
           message: i18n.t('table.deleted_successfully'),
@@ -598,7 +610,7 @@ export default {
           id_list: id_list,
           status: 2
         }
-        ftpUpdateBatch(data).then(() => {
+        databaseUserUpdateBatch(data).then(() => {
           this.getList()
           this.$notify({
             title: i18n.t('table.success'),
@@ -618,7 +630,7 @@ export default {
         status === 1
           ? i18n.t('table.enabled_successfully')
           : i18n.t('table.disabled_successfully')
-      ftpUpdateBatch(data).then(() => {
+      databaseUserUpdateBatch(data).then(() => {
         this.getList()
         this.$notify({
           title: i18n.t('table.success'),

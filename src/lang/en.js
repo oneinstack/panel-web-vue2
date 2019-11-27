@@ -123,10 +123,12 @@ export default {
     content: 'Content',
     shell_script: 'Shell Script',
     access_url: 'Asccess URL',
-    database_name: 'Database Name',
-    character_set: 'Character Set',
-    database_type: 'Database Type',
+    database_name: 'DB Name',
+    character_set: 'Character',
+    database_type: 'DB Type',
     user_account: 'User Account',
+    permissions: 'Permissions',
+    hosts: 'Hosts',
     loading: 'Loading'
   },
   example: {
