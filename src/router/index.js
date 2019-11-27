@@ -83,12 +83,22 @@ export const constantRoutes = [
   {
     path: '/database',
     component: Layout,
+    meta: {
+      title: 'database',
+      icon: 'icon-database'
+    },
     children: [
       {
-        path: '',
-        component: () => import('@/views/documentation/index'),
-        name: 'database',
-        meta: { title: 'database', icon: 'icon-database', affix: true }
+        path: 'accounts',
+        component: () => import('@/views/database/accounts'),
+        name: 'accounts',
+        meta: { title: 'accounts', icon: 'icon-f-db-users-manage' }
+      },
+      {
+        path: 'databases',
+        component: () => import('@/views/database/databases'),
+        name: 'databases',
+        meta: { title: 'databases', icon: 'icon-DB' }
       }
     ]
   },

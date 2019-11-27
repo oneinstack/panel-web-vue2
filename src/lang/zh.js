@@ -4,6 +4,8 @@ export default {
     website: '网站',
     ftp: 'FTP',
     database: '数据库',
+    accounts: '账号管理',
+    databases: '数据库管理',
     monitor: '监控',
     cron: '计划任务',
     Profile: '个人中心',
@@ -119,6 +121,10 @@ export default {
     content: '执行内容',
     shell_script: 'Shell脚本',
     access_url: '访问URL',
+    database_name: '数据库名',
+    character_set: '字符集',
+    database_type: '数据库类型',
+    user_account: '绑定账号',
     loading: '加载中'
   },
   example: {

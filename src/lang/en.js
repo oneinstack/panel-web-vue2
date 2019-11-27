@@ -4,6 +4,8 @@ export default {
     website: 'Website',
     ftp: 'FTP',
     database: 'Database',
+    accounts: 'Accounts',
+    databases: 'Databases',
     monitor: 'Monitor',
     cron: 'Cron',
     Profile: 'Profile',
@@ -15,7 +17,7 @@ export default {
     dashboard: 'Dashboard',
     github: 'Project Site',
     logOut: 'Log Out',
-    profile: 'Profile',
+    profile: 'My Profile',
     theme: 'Theme',
     size: 'Global Size'
   },
@@ -121,6 +123,10 @@ export default {
     content: 'Content',
     shell_script: 'Shell Script',
     access_url: 'Asccess URL',
+    database_name: 'Database Name',
+    character_set: 'Character Set',
+    database_type: 'Database Type',
+    user_account: 'User Account',
     loading: 'Loading'
   },
   example: {
