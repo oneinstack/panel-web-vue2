@@ -12,6 +12,22 @@
         @clear="handleFilter"
       />
 
+      <el-select
+        v-model="listQuery.status"
+        :placeholder="$t('table.status')"
+        clearable
+        style="width: 90px"
+        class="filter-item"
+        @change="handleFilter"
+      >
+        <el-option
+          v-for="item in statusOptions"
+          :key="item.key"
+          :label="item.display_name"
+          :value="item.key"
+        />
+      </el-select>
+
       <!-- <el-select
         v-model="listQuery.sort"
         style="width: 140px"
@@ -240,12 +256,13 @@
         </el-form-item>
 
         <el-form-item
+          v-if="dialogStatus == 'detail' ? true : false"
           :label="$t('table.database_name')"
-          prop="db_name"
+          prop="db_name_list"
         >
           <el-input
-            v-model="temp.db_name"
-            :disabled="dialogStatus === 'detail' ? true : false"
+            v-model="temp.db_name_list"
+            disabled
           />
         </el-form-item>
 
@@ -360,6 +377,11 @@ const calendarTypeOptions = [
   { key: 'US', display_name: 'USA' }
 ]
 
+const statusOptions = [
+  { key: 1, display_name: i18n.t('table.enable') },
+  { key: 2, display_name: i18n.t('table.disable') }
+]
+
 // arr to obj, such as { CN : "China", US : "USA" }
 const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
@@ -410,6 +432,7 @@ export default {
         { label: 'status Ascending', key: '+status' },
         { label: 'status Descending', key: '-status' }
       ],
+      statusOptions,
       showReviewer: false,
       temp: {
         id: undefined,
