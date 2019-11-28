@@ -2,30 +2,29 @@
   <div class="monitor-editor-container">
     <div class="liang-header">
       <span>开启监控</span>
-      <el-switch v-model="monitorSet.status" size="small" style="margin-right: 15px;" :active-value="1" :inactive-value="0" />
+      <el-switch v-model="monitorSet.status" size="small" style="margin-right: 15px;" :active-value="1" :inactive-value="2" @change="handleSaveMonitor" />
       <span>保存天数</span>
       <el-input v-model="monitorSet.id" type="hidden" style="width:0px;" />
       <el-input v-model="monitorSet.save_days" size="small" style="width:200px;margin-right: 10px;" placeholder="请输入内容" />
       <el-button type="primary" size="small" @click="handleSaveMonitor">保存</el-button>
       <el-button size="small" type="danger" @click="handleDelMonitor">清空记录</el-button>
-    </div>
-    <div class="liang-filters-box">
-      <el-radio-group v-model="chartsRadio" size="medium" @change="handleRadio">
-        <el-radio-button label="1">今天</el-radio-button>
-        <el-radio-button label="2">昨天</el-radio-button>
-        <el-radio-button label="7">7天</el-radio-button>
-      </el-radio-group>
-      <el-date-picker
-        v-model="chartsDate"
-        type="daterange"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        value-format="timestamp"
-        @change="changeChartsDate"
-      />
-    </div>
 
+      <div style="float:right">
+        <el-radio-group v-model="chartsRadio" style="margin-left: 30px;" size="medium" @change="handleRadio">
+          <el-radio-button label="1">今天</el-radio-button>
+          <el-radio-button label="2">昨天</el-radio-button>
+          <el-radio-button label="7">7天</el-radio-button>
+        </el-radio-group>
+        <el-date-picker
+          v-model="chartsDate"
+          type="datetimerange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          @change="changeChartsDate"
+        />
+      </div>
+    </div>
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <chart-cpuusage :chart-data="CPUUsage" />
     </el-row>
@@ -48,7 +47,7 @@ export default {
       chartsDate: [],
       monitorSet: {
         id: null,
-        status: '0',
+        status: '1',
         save_days: null
       },
       CPUUsage: [],
