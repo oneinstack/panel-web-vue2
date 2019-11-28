@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-editor-container">
+  <div class="monitor-editor-container">
     <div class=" clearfix">
       <pan-thumb :image="avatar" style="float: left">
         Your roles:
@@ -8,7 +8,7 @@
       <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
       <div class="info-container">
         <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's monitor</span>
       </div>
     </div>
     <div>
@@ -23,7 +23,7 @@ import PanThumb from '@/components/PanThumb'
 import GithubCorner from '@/components/GithubCorner'
 
 export default {
-  name: 'DashboardEditor',
+  name: 'MonitorEditor',
   components: { PanThumb, GithubCorner },
   data() {
     return {
@@ -47,7 +47,7 @@ export default {
     margin: 0 auto;
   }
 
-  .dashboard-editor-container {
+  .monitor-editor-container {
     background-color: #e3e3e3;
     min-height: 100vh;
     padding: 50px 60px 0px;

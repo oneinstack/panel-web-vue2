@@ -1,20 +1,20 @@
 <template>
-  <div class="dashboard-container">
+  <div class="monitor-container">
     <component :is="currentRole" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import adminDashboard from './admin'
-import editorDashboard from './editor'
+import adminMonitor from './admin'
+import editorMonitor from './editor'
 
 export default {
-  name: 'Dashboard',
-  components: { adminDashboard, editorDashboard },
+  name: 'Monitor',
+  components: { adminMonitor, editorMonitor },
   data() {
     return {
-      currentRole: 'adminDashboard'
+      currentRole: 'adminMonitor'
     }
   },
   computed: {
