@@ -72,6 +72,10 @@ export default {
         return params
       })
       this.chart.setOption({
+        title: {
+          text: 'CPUusage',
+          left: 'left'
+        },
         tooltip: {
           trigger: 'axis',
           formatter: function(params) {
@@ -86,6 +90,12 @@ export default {
           type: 'time',
           splitLine: {
             show: false
+          },
+          interval: 3600, // 固定x轴时间间隔
+          axisLabel: {
+            formatter: function(value, index) {
+              return liangTools.unix2hm(value)
+            }
           }
         },
         yAxis: {
@@ -96,7 +106,7 @@ export default {
           }
         },
         series: [{
-          name: '模拟数据',
+          name: '数据',
           type: 'line',
           itemStyle: {
             color: 'rgb(75, 135, 215)'
