@@ -50,6 +50,7 @@
         @click="handleFilter"
       >{{ $t('table.search') }}
       </el-button>
+
       <el-button
         class="filter-item"
         style="margin-left: 10px;"
@@ -58,6 +59,7 @@
         @click="handleReload"
       >{{ $t('table.reload') }}
       </el-button>
+
       <el-button
         class="filter-item"
         style="margin-left: 10px;"
@@ -66,6 +68,16 @@
         @click="handleCreate"
       >{{ $t('table.add') }}
       </el-button>
+
+      <el-button
+        class="filter-item"
+        style="margin-left: 10px;"
+        type="danger"
+        icon="el-icon-edit"
+        @click="dialogStatus === 'resetupdate' ? handleResetPassword() : updateResetPassword()"
+      >{{ $t('table.password') }}
+      </el-button>
+
       <el-button
         class="filter-item"
         style="margin-left: 10px;"
@@ -121,7 +133,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.db_host_list.join(",") }}</span>
+          <span>{{ scope.row.db_host_list }}</span>
         </template>
       </el-table-column>
 
@@ -130,7 +142,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.db_name_list.join(",") }}</span>
+          <span>{{ scope.row.db_name_list }}</span>
         </template>
       </el-table-column>
 
@@ -139,7 +151,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.permission_list.join(",") }}</span>
+          <span>{{ scope.row.permission_list }}</span>
         </template>
       </el-table-column>
 
@@ -236,7 +248,7 @@
 
         <el-form-item
           :label="$t('table.password')"
-          prop="password"
+          prop="db_password"
         >
           <el-input
             v-model="temp.db_password"
@@ -382,6 +394,11 @@ const statusOptions = [
   { key: 2, display_name: i18n.t('table.disable') }
 ]
 
+const permissionOptions = [
+  { key: ['ALL'], display_name: i18n.t('table.permission_all') },
+  { key: ['SELECT'], display_name: i18n.t('table.permission_select') }
+]
+
 // arr to obj, such as { CN : "China", US : "USA" }
 const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
   acc[cur.key] = cur.display_name
@@ -422,7 +439,7 @@ export default {
       listQuery: {
         page: 1,
         pagesize: 20,
-        username: undefined,
+        db_name: undefined,
         status: undefined
       },
       calendarTypeOptions,
@@ -433,14 +450,15 @@ export default {
         { label: 'status Descending', key: '-status' }
       ],
       statusOptions,
+      permissionOptions,
       showReviewer: false,
       temp: {
         id: undefined,
         db_user: '',
         db_password: '',
-        db_host_list: '',
-        db_id_list: '',
-        permission_list: '',
+        db_host_list: [],
+        db_id_list: [],
+        permission_list: [],
         db_name: '',
         db_character: '',
         db_type: '',
@@ -457,12 +475,10 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        db_user: [
-          { required: true, min: 4, max: 20, trigger: 'blur' }
-        ],
-        password: [
-          { min: 6, max: 20 }
-        ]
+        db_user: [{ required: true, min: 2, max: 20, trigger: 'blur' }],
+        db_password: [{ required: true, min: 6, max: 20 }],
+        db_host_list: [{ required: true }],
+        permission_list: [{ required: true }]
       },
       downloadLoading: false
     }
@@ -508,9 +524,9 @@ export default {
       this.temp = {
         db_user: '',
         db_password: '',
-        db_host_list: '',
-        db_id_list: '',
-        permission_list: '',
+        db_host_list: [],
+        db_id_list: [],
+        permission_list: ['ALL'],
         db_name: '',
         db_character: 'utf8mb4',
         db_type: 'MySQL',

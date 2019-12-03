@@ -250,17 +250,9 @@
           :label="$t('table.cron_time')"
           prop="cron_time"
         >
-          <el-popover v-model="cronPopover">
-            <cron
-              i18n="en"
-              @change="changeCron"
-              @close="cronPopover=false"
-            />
-          </el-popover>
           <el-input
             v-model="temp.cron_time"
             :disabled="dialogStatus === 'detail' ? true : false"
-            @click.native="cronPopover=true"
           />
         </el-form-item>
 
@@ -381,7 +373,6 @@ import {
 } from '@/api/cron'
 import waves from '@/directive/waves' // waves directive
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { cron } from 'vue-cron'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -406,7 +397,7 @@ const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
 
 export default {
   name: 'ComplexTable',
-  components: { Pagination, cron },
+  components: { Pagination },
   directives: { waves },
   filters: {
     statusFilter(status) {
@@ -440,8 +431,6 @@ export default {
       list: null,
       multipleSelection: [],
       total: 0,
-      cronPopover: false,
-      cron: '',
       listLoading: true,
       listQuery: {
         page: 1,
@@ -666,9 +655,6 @@ export default {
           duration: 2000
         })
       })
-    },
-    changeCron(val) {
-      this.temp.cron_time = val
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort

@@ -126,6 +126,8 @@ export default {
     database_type: '数据库类型',
     user_account: '绑定账号',
     permissions: '权限',
+    permission_all: '读写',
+    permission_select: '只读',
     hosts: '地址',
     loading: '加载中'
   },

@@ -128,6 +128,8 @@ export default {
     database_type: 'DB Type',
     user_account: 'User Account',
     permissions: 'Permissions',
+    permission_all: 'Read/Write',
+    permission_select: 'Read-only',
     hosts: 'Hosts',
     loading: 'Loading'
   },

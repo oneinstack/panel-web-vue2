@@ -47,6 +47,14 @@ export function databaseUserUpdate(data) {
   })
 }
 
+export function databaseUserUpdateBatch(data) {
+  return request({
+    url: '/database/update_user_batch',
+    method: 'post',
+    data
+  })
+}
+
 export function databaseList(data) {
   return request({
     url: '/database/list_db',
