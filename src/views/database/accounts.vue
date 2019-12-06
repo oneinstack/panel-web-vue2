@@ -73,15 +73,6 @@
         class="filter-item"
         style="margin-left: 10px;"
         type="danger"
-        icon="el-icon-edit"
-        @click="dialogStatus === 'resetupdate' ? handleResetPassword() : updateResetPassword()"
-      >{{ $t('table.password') }}
-      </el-button>
-
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px;"
-        type="danger"
         icon="el-icon-warning"
         @click="handleBan"
       >{{ $t('table.disable') }}
@@ -261,12 +252,32 @@
           :label="$t('table.hosts')"
           prop="db_host_list"
         >
-          <el-input
+          <el-select
             v-model="temp.db_host_list"
+            :placeholder="$t('table.status')"
+            clearable
+            style="width: 140px"
+            class="filter-item"
             :disabled="dialogStatus === 'detail' ? true : false"
+            @change="handleHost"
+          >
+            <el-option
+              v-for="item in hostOptions"
+              :key="item.key"
+              :label="item.display_name"
+              :value="item.key"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item
+          v-if="isIp"
+          :label="$t('table.allip')"
+          prop="db_name_list"
+        >
+          <el-input
+            v-model="temp.ip"
           />
         </el-form-item>
-
         <el-form-item
           v-if="dialogStatus == 'detail' ? true : false"
           :label="$t('table.database_name')"
@@ -393,6 +404,11 @@ const statusOptions = [
   { key: 1, display_name: i18n.t('table.enable') },
   { key: 2, display_name: i18n.t('table.disable') }
 ]
+const hostOptions = [
+  { key: 'localhost', display_name: i18n.t('table.localhost') },
+  { key: '%', display_name: i18n.t('table.all') },
+  { key: 'IP', display_name: i18n.t('table.ip') }
+]
 
 const permissionOptions = [
   { key: ['ALL'], display_name: i18n.t('table.permission_all') },
@@ -449,11 +465,14 @@ export default {
         { label: 'status Ascending', key: '+status' },
         { label: 'status Descending', key: '-status' }
       ],
+      isIp: false,
       statusOptions,
+      hostOptions,
       permissionOptions,
       showReviewer: false,
       temp: {
         id: undefined,
+        ip: '',
         db_user: '',
         db_password: '',
         db_host_list: [],
@@ -498,6 +517,13 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    handleHost(val) {
+      if (val === 'IP') {
+        this.isIp = true
+      } else {
+        this.isIp = false
+      }
     },
     handleModifyStatus(row, status) {
       this.$message({
