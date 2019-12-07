@@ -275,10 +275,8 @@
         >
           <el-select
             v-model="temp.db_host_list"
-            :placeholder="$t('table.status')"
+            :placeholder="$t('table.grant_hosts')"
             clearable
-            multiple
-            style="width: 140px"
             class="filter-item"
             :disabled="dialogStatus === 'detail' ? true : false"
             @change="handleHost"
@@ -293,22 +291,40 @@
         </el-form-item>
         <el-form-item
           v-if="isIp"
-          :label="$t('table.allip')"
-          prop="db_name_list"
+          :label="$t('table.hosts_ip')"
+          prop="db_host_list"
+        >
+          <el-input v-model="temp.db_host_list" />
+        </el-form-item>
+
+        <el-form-item
+          :label="$t('table.database_name')"
+          prop="db_id_list"
         >
           <el-input
-            v-model="temp.ip"
+            v-model="temp.db_id_list"
+            :disabled="dialogStatus === 'detail' ? true : false"
           />
         </el-form-item>
+
         <el-form-item
-          v-if="dialogStatus == 'detail' ? true : false"
-          :label="$t('table.database_name')"
-          prop="db_name_list"
+          :label="$t('table.permissions')"
+          prop="permission_list"
         >
-          <el-input
-            v-model="temp.db_name_list"
-            disabled
-          />
+          <el-select
+            v-model="temp.permission_list"
+            :placeholder="$t('table.permissions')"
+            clearable
+            class="filter-item"
+            :disabled="dialogStatus === 'detail' ? true : false"
+          >
+            <el-option
+              v-for="item in permissionOptions"
+              :key="item.key"
+              :label="item.display_name"
+              :value="item.key"
+            />
+          </el-select>
         </el-form-item>
 
         <el-form-item
@@ -427,14 +443,14 @@ const statusOptions = [
   { key: 2, display_name: i18n.t('table.disable') }
 ]
 const hostOptions = [
-  { key: 'localhost', display_name: i18n.t('table.localhost') },
-  { key: '%', display_name: i18n.t('table.all') },
-  { key: 'IP', display_name: i18n.t('table.ip') }
+  { key: 'localhost', display_name: i18n.t('table.hosts_localhost') },
+  { key: '%', display_name: i18n.t('table.hosts_all') },
+  { key: 'IP', display_name: i18n.t('table.hosts_ip') }
 ]
 
 const permissionOptions = [
-  { key: ['ALL'], display_name: i18n.t('table.permission_all') },
-  { key: ['SELECT'], display_name: i18n.t('table.permission_select') }
+  { key: 'ALL', display_name: i18n.t('table.permission_all') },
+  { key: 'SELECT', display_name: i18n.t('table.permission_select') }
 ]
 
 // arr to obj, such as { CN : "China", US : "USA" }
@@ -494,7 +510,6 @@ export default {
       showReviewer: false,
       temp: {
         id: undefined,
-        ip: '',
         db_user: '',
         db_password: '',
         db_host_list: [],
@@ -516,10 +531,10 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        db_user: [{ required: true, min: 2, max: 20, trigger: 'blur' }],
-        db_password: [{ required: true, min: 6, max: 20 }],
-        db_host_list: [{ required: true }],
-        permission_list: [{ required: true }]
+        db_user: [{ required: true, min: 2, max: 20, message: 'User is required', trigger: 'blur' }],
+        db_password: [{ required: true, min: 6, max: 20, message: 'Password is required' }],
+        db_host_list: [{ required: true, message: 'Hosts is required' }],
+        permission_list: [{ required: true, message: 'Permission is required' }]
       },
       downloadLoading: false
     }
@@ -572,7 +587,7 @@ export default {
       this.temp = {
         db_user: '',
         db_password: '',
-        db_host_list: [],
+        db_host_list: ['localhost'],
         db_id_list: [],
         permission_list: ['ALL'],
         db_name: '',

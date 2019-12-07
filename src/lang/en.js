@@ -131,6 +131,10 @@ export default {
     permission_all: 'Read/Write',
     permission_select: 'Read-only',
     hosts: 'Hosts',
+    grant_hosts: 'Grant Hosts',
+    hosts_localhost: 'Localhost',
+    hosts_all: 'ALL Hosts',
+    hosts_ip: 'IP List',
     loading: 'Loading'
   },
   example: {

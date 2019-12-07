@@ -61,10 +61,6 @@ export default {
       '由于我在使用时它只有vue@1版本，而且和mockjs不兼容，所以自己改造了一下，如果大家要使用的话，优先还是使用官方版本。'
   },
   table: {
-    allip: '指定多个ip',
-    localhost: '本地服务器',
-    all: '所有人',
-    ip: 'IP',
     dynamicTips1: '固定表头, 按照表头顺序排序',
     dynamicTips2: '不固定表头, 按照点击顺序排序',
     dragTips1: '默认顺序',
@@ -133,6 +129,10 @@ export default {
     permission_all: '读写',
     permission_select: '只读',
     hosts: '地址',
+    grant_hosts: '授权地址',
+    hosts_localhost: '本地服务器',
+    hosts_all: '所有人(%)',
+    hosts_ip: '指定IP',
     loading: '加载中'
   },
   example: {
