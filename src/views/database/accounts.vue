@@ -124,7 +124,14 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.db_host_list }}</span>
+          <el-tag
+            v-for="item in scope.row.db_host_list"
+            :key="item"
+            type="success"
+            effect="dark"
+          >
+            {{ item }}
+          </el-tag>
         </template>
       </el-table-column>
 
@@ -133,7 +140,14 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.db_name_list }}</span>
+          <el-tag
+            v-for="item in scope.row.db_name_list"
+            :key="item"
+            type="success"
+            effect="dark"
+          >
+            {{ item }}
+          </el-tag>
         </template>
       </el-table-column>
 
@@ -142,7 +156,14 @@
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row.permission_list }}</span>
+          <el-tag
+            v-for="item in scope.row.permission_list"
+            :key="item"
+            type="success"
+            effect="dark"
+          >
+            {{ item }}
+          </el-tag>
         </template>
       </el-table-column>
 
@@ -256,6 +277,7 @@
             v-model="temp.db_host_list"
             :placeholder="$t('table.status')"
             clearable
+            multiple
             style="width: 140px"
             class="filter-item"
             :disabled="dialogStatus === 'detail' ? true : false"
