@@ -625,7 +625,7 @@ export default {
       this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
-      this.temp.password = this.randomPassword()
+      this.temp.db_password = this.randomPassword()
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
