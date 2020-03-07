@@ -27,7 +27,7 @@ const actions = {
   getMonitorSetting(context) {
     console.log('获取监控设置信息')
     api.getMonitorSetting().then(data => {
-      if (data.result === 1) {
+      if (data.code === 200) {
         console.log(data.data)
         context.commit('setMonitorSetObj', data.data)
       } else {
@@ -44,7 +44,7 @@ const actions = {
   getModifyMonitorSetting(context, params) {
     console.log('设置监控信息')
     api.getModifyMonitorSetting(params).then(data => {
-      if (data.result === 1) {
+      if (data.code === 200) {
         console.log(data.data)
         Message.success('设置监控信息成功')
       } else {
@@ -60,7 +60,7 @@ const actions = {
   getMonitorDelete() {
     console.log('清空监控信息')
     api.getMonitorDelete().then(data => {
-      if (data.result === 1) {
+      if (data.code === 200) {
         Message.success('监控记录清空成功')
       } else {
         console.log(JSON.stringify(data))
@@ -75,7 +75,7 @@ const actions = {
   getMonitorInfo(context, parmas) {
     console.log('获取监控数据信息')
     api.getMonitorInfo(parmas).then(data => {
-      if (data.result === 1) {
+      if (data.code === 200) {
         console.log(data)
         context.commit('setMonitorDataInfo', data.data)
       } else {
